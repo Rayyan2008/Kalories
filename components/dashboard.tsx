@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Calendar, Plus, Trash2, BarChart3, Brain, Apple, User } from "lucide-react"
+import { Calendar, Plus, Trash2, BarChart3, Brain, Apple, User, Home } from "lucide-react"
 import { useRouter } from "next/navigation"
 import ProfileSetupModal from "@/components/profile-setup-modal"
 
@@ -112,6 +112,10 @@ export default function Dashboard() {
             <h1 className="text-xl font-bold">Kalorie AI Dashboard</h1>
           </div>
           <div className="flex items-center space-x-4">
+            <Button variant="outline" size="sm" onClick={() => router.push("/")}>
+              <Home className="h-4 w-4 mr-2" />
+              Home
+            </Button>
             <Button variant="outline" size="sm" onClick={() => setShowProfileSetup(true)}>
               <User className="h-4 w-4 mr-2" />
               Profile
