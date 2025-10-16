@@ -4,18 +4,38 @@ import { Button } from "@/components/ui/button"
 const plans = [
   {
     name: "Basic",
-    price: "$9",
-    features: ["5 team members", "10 projects", "Basic analytics", "Email support"],
+    price: "$4.99",
+    period: "/month",
+    features: [
+      "Unlimited meal logging",
+      "Basic calorie tracking",
+      "Daily progress charts",
+      "Email support"
+    ],
   },
   {
     name: "Pro",
-    price: "$29",
-    features: ["Unlimited team members", "Unlimited projects", "Advanced analytics", "Priority support"],
+    price: "$9.99",
+    period: "/month",
+    features: [
+      "Everything in Basic",
+      "AI-powered meal analysis",
+      "Advanced nutrition insights",
+      "Calendar view",
+      "Priority support"
+    ],
   },
   {
-    name: "Enterprise",
-    price: "Custom",
-    features: ["Custom features", "Dedicated account manager", "On-premise deployment", "24/7 phone support"],
+    name: "Premium",
+    price: "$14.99",
+    period: "/month",
+    features: [
+      "Everything in Pro",
+      "Personal AI trainer",
+      "Custom meal recommendations",
+      "Health goal tracking",
+      "24/7 premium support"
+    ],
   },
 ]
 
@@ -30,7 +50,7 @@ export default function Pricing() {
               <h3 className="text-2xl font-bold mb-4">{plan.name}</h3>
               <p className="text-4xl font-bold mb-6">
                 {plan.price}
-                <span className="text-lg font-normal text-gray-600">/month</span>
+                <span className="text-lg font-normal text-gray-600">{plan.period}</span>
               </p>
               <ul className="mb-8">
                 {plan.features.map((feature, featureIndex) => (
@@ -41,7 +61,7 @@ export default function Pricing() {
                 ))}
               </ul>
               <Button className="w-full" variant={index === 1 ? "default" : "outline"}>
-                {index === 2 ? "Contact Sales" : "Get Started"}
+                {index === 2 ? "Start Premium" : "Get Started"}
               </Button>
             </div>
           ))}
