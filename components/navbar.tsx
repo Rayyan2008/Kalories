@@ -46,14 +46,8 @@ export default function Navbar() {
           )}
           {isLoggedIn && (
             <>
-              <Link href="/calendar" className="transition-colors hover:text-primary">
-                Calendar
-              </Link>
-              <Link href="/progress" className="transition-colors hover:text-primary">
-                Progress
-              </Link>
-              <Link href="/ai-suggestions" className="transition-colors hover:text-primary">
-                AI Suggestions
+              <Link href="/tracker" className="transition-colors hover:text-primary">
+                Tracker
               </Link>
             </>
           )}
