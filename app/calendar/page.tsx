@@ -157,7 +157,7 @@ export default function CalendarPage() {
                         onClick={() => {
                           const today = new Date()
                           setCurrentMonth(new Date(today.getFullYear(), today.getMonth(), 1))
-                          setSelectedDate(today.toISOString().split('T')[0])
+                          setSelectedDate(today.toLocaleDateString('en-CA'))
                         }}
                       >
                         Today
@@ -182,12 +182,12 @@ export default function CalendarPage() {
 
                       const calories = getTotalCaloriesForDate(date)
                       const status = getCalorieStatus(calories)
-                      const isSelected = selectedDate === date.toISOString().split('T')[0]
+                      const isSelected = selectedDate === date.toLocaleDateString('en-CA')
 
                       return (
                         <button
                           key={index}
-                          onClick={() => setSelectedDate(date.toISOString().split('T')[0])}
+                          onClick={() => setSelectedDate(date.toLocaleDateString('en-CA'))}
                           className={`p-2 text-left border rounded-md transition-colors hover:bg-accent/50 ${
                             isSelected ? 'ring-2 ring-primary' : ''
                           } ${getStatusColor(status)}`}
