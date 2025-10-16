@@ -24,6 +24,8 @@ export default function LoginForm() {
     // For demo purposes, accept any email/password combination
     if (email && password) {
       localStorage.setItem("kalorie-auth", JSON.stringify({ email, isLoggedIn: true }))
+      // Clear any existing profile data for new users (in real app, this would be handled by backend)
+      // localStorage.removeItem("kalorie-profile")
       router.push("/dashboard")
     }
 

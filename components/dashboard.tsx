@@ -6,8 +6,9 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Calendar, Plus, Trash2, BarChart3, Brain, Apple } from "lucide-react"
+import { Calendar, Plus, Trash2, BarChart3, Brain, Apple, User } from "lucide-react"
 import { useRouter } from "next/navigation"
+import ProfileSetupModal from "@/components/profile-setup-modal"
 
 interface MealEntry {
   id: string
@@ -23,6 +24,8 @@ export default function Dashboard() {
   const [mealText, setMealText] = useState("")
   const [meals, setMeals] = useState<MealEntry[]>([])
   const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [showProfileSetup, setShowProfileSetup] = useState(false)
+  const [profileData, setProfileData] = useState<any>(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -31,6 +34,14 @@ export default function Dashboard() {
     if (!auth) {
       router.push("/login")
       return
+    }
+
+    // Check if profile is set up
+    const profile = localStorage.getItem("kalorie-profile")
+    if (!profile) {
+      setShowProfileSetup(true)
+    } else {
+      setProfileData(JSON.parse(profile))
     }
 
     // Load saved meals
@@ -101,6 +112,10 @@ export default function Dashboard() {
             <h1 className="text-xl font-bold">Kalorie AI Dashboard</h1>
           </div>
           <div className="flex items-center space-x-4">
+            <Button variant="outline" size="sm" onClick={() => setShowProfileSetup(true)}>
+              <User className="h-4 w-4 mr-2" />
+              Profile
+            </Button>
             <Button variant="outline" size="sm" onClick={logout}>
               Logout
             </Button>
@@ -186,6 +201,38 @@ export default function Dashboard() {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* Calorie Goals */}
+            {profileData?.calorieGoals && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <User className="h-5 w-5" />
+                    Your Goals
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4 text-center">
+                    <div>
+                      <div className="text-lg font-semibold text-green-600">{profileData.calorieGoals.dailyDeficit}</div>
+                      <div className="text-xs text-muted-foreground">Daily Goal</div>
+                    </div>
+                    <div>
+                      <div className="text-lg font-semibold text-blue-600">{profileData.calorieGoals.weeklyGoal}</div>
+                      <div className="text-xs text-muted-foreground">Weekly Goal</div>
+                    </div>
+                    <div>
+                      <div className="text-lg font-semibold text-purple-600">{profileData.calorieGoals.monthlyGoal}</div>
+                      <div className="text-xs text-muted-foreground">Monthly Goal</div>
+                    </div>
+                    <div>
+                      <div className="text-lg font-semibold text-orange-600">{profileData.calorieGoals.dailyMaintenance}</div>
+                      <div className="text-xs text-muted-foreground">Maintenance</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Daily Summary */}
             <Card>
               <CardHeader>
@@ -198,6 +245,11 @@ export default function Dashboard() {
                 <div className="text-center">
                   <div className="text-3xl font-bold text-primary">{totalCalories}</div>
                   <div className="text-sm text-muted-foreground">Total Calories</div>
+                  {profileData?.calorieGoals && (
+                    <div className="text-sm text-muted-foreground mt-1">
+                      Goal: {profileData.calorieGoals.dailyDeficit} cal
+                    </div>
+                  )}
                 </div>
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
@@ -244,6 +296,12 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {/* Profile Setup Modal */}
+      <ProfileSetupModal
+        isOpen={showProfileSetup}
+        onClose={() => setShowProfileSetup(false)}
+      />
     </div>
   )
 }
