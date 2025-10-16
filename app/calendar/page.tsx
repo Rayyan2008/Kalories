@@ -151,6 +151,17 @@ export default function CalendarPage() {
                       >
                         →
                       </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const today = new Date()
+                          setCurrentMonth(new Date(today.getFullYear(), today.getMonth(), 1))
+                          setSelectedDate(today.toISOString().split('T')[0])
+                        }}
+                      >
+                        Today
+                      </Button>
                     </div>
                   </div>
 
