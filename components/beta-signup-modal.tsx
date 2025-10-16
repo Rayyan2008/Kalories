@@ -27,6 +27,8 @@ export default function BetaSignupModal({ children }: { children: React.ReactNod
       setIsSubmitted(false)
       setEmail("")
       setIsOpen(false)
+      // Redirect to login after signup
+      window.location.href = "/login"
     }, 2000)
   }
 
