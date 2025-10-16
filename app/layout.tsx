@@ -7,9 +7,9 @@ import MouseMoveEffect from "@/components/mouse-move-effect"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Amane Soft - Cutting-Edge Software Solutions",
-  description: "Amane Soft delivers innovative, high-performance software solutions for businesses of the future.",
-    generator: 'v0.app'
+  title: "Kalorie.ai – \"Track Smarter, Not Harder\"",
+  description: "A smart AI-powered calorie & diet tracker that works like a notepad — just write what you ate, and it does the rest.",
+  generator: 'v0.app'
 }
 
 export default function RootLayout({
