@@ -1,3 +1,6 @@
+"use client"
+
+import { useEffect } from "react"
 import Navbar from "@/components/navbar"
 import Hero from "@/components/hero"
 import Features from "@/components/features"
@@ -8,6 +11,21 @@ import CTA from "@/components/cta"
 import Footer from "@/components/footer"
 
 export default function Home() {
+  useEffect(() => {
+    // Check if user is already logged in and redirect to dashboard
+    const authData = localStorage.getItem("kalorie-auth")
+    if (authData) {
+      try {
+        const { isLoggedIn } = JSON.parse(authData)
+        if (isLoggedIn) {
+          window.location.href = "/dashboard"
+        }
+      } catch (error) {
+        console.error("Error parsing auth data:", error)
+      }
+    }
+  }, [])
+
   return (
     <div className="relative min-h-screen">
       {/* Background gradients */}
