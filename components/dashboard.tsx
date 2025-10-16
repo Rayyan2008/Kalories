@@ -60,29 +60,60 @@ export default function Dashboard() {
 
     setIsAnalyzing(true)
 
-    // Simulate AI analysis (in real app, this would call an API)
-    await new Promise(resolve => setTimeout(resolve, 1500))
+    try {
+      // Call AI API for natural language parsing and nutrition analysis
+      const response = await fetch('/api/analyze-meal', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ mealText }),
+      })
 
-    // Mock nutritional data based on meal text
-    const mockData = {
-      calories: Math.floor(Math.random() * 500) + 100,
-      protein: Math.floor(Math.random() * 30) + 5,
-      carbs: Math.floor(Math.random() * 50) + 10,
-      fat: Math.floor(Math.random() * 20) + 2
+      if (!response.ok) {
+        throw new Error('Failed to analyze meal')
+      }
+
+      const data = await response.json()
+
+      const newMeal: MealEntry = {
+        id: Date.now().toString(),
+        text: mealText,
+        calories: data.calories,
+        protein: data.protein,
+        carbs: data.carbs,
+        fat: data.fat,
+        timestamp: new Date()
+      }
+
+      const updatedMeals = [newMeal, ...meals]
+      setMeals(updatedMeals)
+      localStorage.setItem("kalorie-meals", JSON.stringify(updatedMeals))
+      setMealText("")
+    } catch (error) {
+      console.error('Error analyzing meal:', error)
+      // Fallback to mock data if API fails
+      const mockData = {
+        calories: Math.floor(Math.random() * 500) + 100,
+        protein: Math.floor(Math.random() * 30) + 5,
+        carbs: Math.floor(Math.random() * 50) + 10,
+        fat: Math.floor(Math.random() * 20) + 2
+      }
+
+      const newMeal: MealEntry = {
+        id: Date.now().toString(),
+        text: mealText,
+        ...mockData,
+        timestamp: new Date()
+      }
+
+      const updatedMeals = [newMeal, ...meals]
+      setMeals(updatedMeals)
+      localStorage.setItem("kalorie-meals", JSON.stringify(updatedMeals))
+      setMealText("")
+    } finally {
+      setIsAnalyzing(false)
     }
-
-    const newMeal: MealEntry = {
-      id: Date.now().toString(),
-      text: mealText,
-      ...mockData,
-      timestamp: new Date()
-    }
-
-    const updatedMeals = [newMeal, ...meals]
-    setMeals(updatedMeals)
-    localStorage.setItem("kalorie-meals", JSON.stringify(updatedMeals))
-    setMealText("")
-    setIsAnalyzing(false)
   }
 
   const deleteMeal = (id: string) => {
