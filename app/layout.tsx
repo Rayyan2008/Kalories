@@ -9,7 +9,10 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Kalorie.ai – \"Track Smarter, Not Harder\"",
   description: "A smart AI-powered calorie & diet tracker that works like a notepad — just write what you ate, and it does the rest.",
-  generator: 'v0.app'
+  generator: 'v0.app',
+  icons: {
+    icon: '/favicon.ico',
+  },
 }
 
 export default function RootLayout({
