@@ -5,52 +5,50 @@ import Footer from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Calendar, Flame, Target } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 
 interface MealEntry {
   id: string
-  date: string
-  food: string
+  text: string
   calories: number
   protein: number
   carbs: number
   fat: number
+  timestamp: Date
 }
 
 export default function CalendarPage() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
   const [currentMonth, setCurrentMonth] = useState(new Date())
+  const [meals, setMeals] = useState<MealEntry[]>([])
+  const [profileData, setProfileData] = useState<any>(null)
+  const router = useRouter()
 
-  // Mock data - in real app this would come from API/database
-  const mealEntries: MealEntry[] = [
-    {
-      id: "1",
-      date: "2024-01-15",
-      food: "½ McAloo Tikki Burger",
-      calories: 320,
-      protein: 12,
-      carbs: 45,
-      fat: 15
-    },
-    {
-      id: "2",
-      date: "2024-01-15",
-      food: "Greek Salad",
-      calories: 180,
-      protein: 8,
-      carbs: 12,
-      fat: 12
-    },
-    {
-      id: "3",
-      date: "2024-01-16",
-      food: "Chicken Breast 200g",
-      calories: 330,
-      protein: 62,
-      carbs: 0,
-      fat: 7
+  useEffect(() => {
+    // Check authentication
+    const auth = localStorage.getItem("kalorie-auth")
+    if (!auth) {
+      router.push("/login")
+      return
     }
-  ]
+
+    // Load meals
+    const savedMeals = localStorage.getItem("kalorie-meals")
+    if (savedMeals) {
+      const parsedMeals = JSON.parse(savedMeals).map((meal: any) => ({
+        ...meal,
+        timestamp: new Date(meal.timestamp)
+      }))
+      setMeals(parsedMeals)
+    }
+
+    // Load profile
+    const profile = localStorage.getItem("kalorie-profile")
+    if (profile) {
+      setProfileData(JSON.parse(profile))
+    }
+  }, [router])
 
   const getDaysInMonth = (date: Date) => {
     const year = date.getFullYear()
@@ -77,16 +75,19 @@ export default function CalendarPage() {
 
   const getMealsForDate = (date: Date) => {
     const dateString = date.toISOString().split('T')[0]
-    return mealEntries.filter(entry => entry.date === dateString)
+    return meals.filter(meal => {
+      const mealDate = meal.timestamp.toISOString().split('T')[0]
+      return mealDate === dateString
+    })
   }
 
   const getTotalCaloriesForDate = (date: Date) => {
-    const meals = getMealsForDate(date)
-    return meals.reduce((total, meal) => total + meal.calories, 0)
+    const mealsForDate = getMealsForDate(date)
+    return mealsForDate.reduce((total, meal) => total + meal.calories, 0)
   }
 
   const getCalorieStatus = (calories: number) => {
-    const target = 2000 // This would come from user profile
+    const target = profileData?.calorieGoals?.dailyDeficit || 2000
     if (calories === 0) return 'none'
     if (calories < target * 0.8) return 'under'
     if (calories <= target * 1.1) return 'on-track'
@@ -226,7 +227,7 @@ export default function CalendarPage() {
                       <div className="space-y-4">
                         {selectedMeals.map(meal => (
                           <div key={meal.id} className="border rounded-lg p-4">
-                            <div className="font-medium">{meal.food}</div>
+                            <div className="font-medium">{meal.text}</div>
                             <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
                               <div className="flex items-center gap-1">
                                 <Flame className="w-4 h-4" />
@@ -271,7 +272,7 @@ export default function CalendarPage() {
                     <Target className="w-5 h-5" />
                     <h3 className="text-lg font-semibold">Daily Target</h3>
                   </div>
-                  <div className="text-2xl font-bold">2,000 cal</div>
+                  <div className="text-2xl font-bold">{profileData?.calorieGoals?.dailyDeficit || 2000} cal</div>
                   <p className="text-sm text-muted-foreground mt-1">Based on your profile</p>
                 </div>
               </div>
