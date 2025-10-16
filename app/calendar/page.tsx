@@ -226,7 +226,7 @@ export default function CalendarPage() {
                 {selectedDate ? (
                   <div className="bg-card/50 backdrop-blur-sm border rounded-lg p-6">
                     <h3 className="text-lg font-semibold mb-4">
-                      {new Date(selectedDate).toLocaleDateString('en-US', {
+                      {new Date(selectedDate + 'T00:00:00').toLocaleDateString('en-US', {
                         weekday: 'long',
                         year: 'numeric',
                         month: 'long',
