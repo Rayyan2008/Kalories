@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: "A smart AI-powered calorie & diet tracker that works like a notepad — just write what you ate, and it does the rest.",
   generator: 'v0.app',
   icons: {
-    icon: '/favicon.ico',
+    icon: '/favicon.png',
   },
 }
 
