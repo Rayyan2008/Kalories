@@ -44,6 +44,19 @@ export default function Navbar() {
               </Link>
             </>
           )}
+          {isLoggedIn && (
+            <>
+              <Link href="/calendar" className="transition-colors hover:text-primary">
+                Calendar
+              </Link>
+              <Link href="/progress" className="transition-colors hover:text-primary">
+                Progress
+              </Link>
+              <Link href="/ai-suggestions" className="transition-colors hover:text-primary">
+                AI Suggestions
+              </Link>
+            </>
+          )}
         </nav>
         <div className="flex items-center space-x-4">
           <Link href="https://github.com/kalorieai" target="_blank" rel="noreferrer">
