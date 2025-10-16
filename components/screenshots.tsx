@@ -36,10 +36,36 @@ export default function Screenshots() {
         {screenshots.map((screenshot, index) => (
           <div key={index} className="relative overflow-hidden rounded-lg border bg-background p-8">
             <div className="aspect-video relative mb-4 bg-muted rounded-lg flex items-center justify-center">
-              <div className="text-muted-foreground text-center">
-                <div className="text-4xl mb-2">📱</div>
-                <p className="text-sm">Screenshot Placeholder</p>
-              </div>
+              {index === 0 ? (
+                <div className="text-muted-foreground text-center">
+                  <div className="text-2xl mb-4">📝</div>
+                  <div className="bg-white p-4 rounded-lg shadow-md text-black text-left max-w-sm">
+                    <div className="flex">
+                      <div className="flex-1">
+                        <textarea
+                          className="w-full h-20 border-none outline-none resize-none text-sm"
+                          placeholder="Type what you ate..."
+                          defaultValue="2 idlis + sambar"
+                        />
+                      </div>
+                      <div className="ml-4 w-32">
+                        <div className="bg-gray-100 p-2 rounded text-xs">
+                          <div className="font-semibold">Calories: 320</div>
+                          <div>Protein: 12g</div>
+                          <div>Carbs: 45g</div>
+                          <div>Fat: 8g</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-xs mt-2">Mockup: Typing "2 idlis + sambar"</p>
+                </div>
+              ) : (
+                <div className="text-muted-foreground text-center">
+                  <div className="text-4xl mb-2">📱</div>
+                  <p className="text-sm">Screenshot Placeholder</p>
+                </div>
+              )}
             </div>
             <h3 className="font-bold text-xl mb-2">{screenshot.title}</h3>
             <p className="text-muted-foreground">{screenshot.description}</p>
