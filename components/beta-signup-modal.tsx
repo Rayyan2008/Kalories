@@ -23,13 +23,14 @@ export default function BetaSignupModal({ children }: { children: React.ReactNod
     // Here you would typically send the email to your backend
     console.log("Beta signup email:", email)
     setIsSubmitted(true)
-    setTimeout(() => {
-      setIsSubmitted(false)
-      setEmail("")
-      setIsOpen(false)
-      // Redirect to login after signup
-      window.location.href = "/login"
-    }, 2000)
+      setTimeout(() => {
+        setIsSubmitted(false)
+        setEmail("")
+        setIsOpen(false)
+        // Redirect to dashboard after signup (auto-login)
+        localStorage.setItem("kalorie-auth", JSON.stringify({ email, isLoggedIn: true }))
+        window.location.href = "/dashboard"
+      }, 2000)
   }
 
   return (

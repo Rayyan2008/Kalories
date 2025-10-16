@@ -20,7 +20,7 @@ const dashboardOptions = [
     description: "Visual graphs to show calorie intake trends and health goals progress.",
     icon: BarChart3,
     href: "/progress",
-    available: false,
+    available: true,
   },
   {
     title: "💡 AI Suggestions",
