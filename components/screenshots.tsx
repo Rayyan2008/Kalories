@@ -3,7 +3,7 @@ import Image from "next/image"
 const screenshots = [
   {
     title: "Smart Food Notepad",
-    description: "Natural language input: Users type meals casually (e.g., '2 boiled eggs + black coffee', 'Paneer butter masala with 1 roti'). AI instantly parses text to identify items and shows nutrition breakdown. Live calorie counter in sidebar tracks daily totals. Supports Indian and global cuisines for accurate data.",
+    description: "Simply type what you ate, and AI calculates calories instantly.",
     image: "/placeholder-screenshot-1.png", // Placeholder - replace with actual image
   },
   {
