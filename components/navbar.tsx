@@ -46,6 +46,9 @@ export default function Navbar() {
           )}
           {isLoggedIn && (
             <>
+              <Link href="/" className="transition-colors hover:text-primary">
+                Home
+              </Link>
               <Link href="/tracker" className="transition-colors hover:text-primary">
                 Tracker
               </Link>
