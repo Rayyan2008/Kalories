@@ -9,7 +9,7 @@ export default function CTA() {
           Ready to transform your health journey?
         </h2>
         <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
-          Join thousands of users who are already tracking their calories smarter with Kalorie AI. Start your beta access today and take control of your nutrition.
+          The landing page should look sleek and modern, with a hero section explaining the main feature (type → see calories), followed by feature sections, screenshots/mockups, testimonials, and a CTA (Join Beta / Get Started).
         </p>
         <BetaSignupModal>
           <Button size="lg" className="mt-4">

@@ -3,22 +3,22 @@ import { Brain, Cloud, Shield, Zap } from "lucide-react"
 const features = [
   {
     name: "🗓 Calendar View",
-    description: "Track daily, weekly, and monthly food logs with an intuitive calendar interface.",
+    description: "to track daily, weekly, and monthly food logs.",
     icon: Brain,
   },
   {
     name: "📊 Progress Tracker",
-    description: "Visual graphs to show calorie intake trends and health goals progress.",
+    description: "visual graphs to show calorie intake trends and health goals.",
     icon: Cloud,
   },
   {
     name: "💡 AI Suggestions Page",
-    description: "Get personalized meal recommendations and healthier alternatives based on your habits.",
+    description: "gives personalized meal recommendations and healthier alternatives.",
     icon: Shield,
   },
   {
     name: "🧠 AI Trainer",
-    description: "Offers fitness and diet guidance based on user history and goals.",
+    description: "offers fitness and diet guidance based on user history.",
     icon: Zap,
   },
 ]

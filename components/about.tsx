@@ -4,7 +4,7 @@ export default function About() {
       <div className="mx-auto max-w-[58rem] text-center">
         <h2 className="font-bold text-3xl leading-[1.1] sm:text-3xl md:text-5xl">About Kalorie AI</h2>
         <p className="mt-4 text-muted-foreground sm:text-lg">
-          We're on a mission to make calorie tracking smarter, not harder. Our AI-powered platform transforms the way you log and understand your nutrition.
+          The platform also includes:
         </p>
       </div>
       <div className="mx-auto max-w-3xl">
