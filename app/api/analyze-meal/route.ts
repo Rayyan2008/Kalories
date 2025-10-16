@@ -63,45 +63,31 @@ const foodDatabase: Record<string, { calories: number; protein: number; carbs: n
 
 function parseMealText(text: string): { items: string[]; quantities: number[] } {
   const lowerText = text.toLowerCase()
+
+  // Split on common separators
+  const separators = /\s+(?:and|with|\+|,)\s+/
+  const parts = lowerText.split(separators)
+
   const items: string[] = []
   const quantities: number[] = []
 
-  // Extract quantities and items
-  const patterns = [
-    /(\d+(?:\.\d+)?)\s*(half|½)?\s*([a-zA-Z\s]+)/g,
-    /([a-zA-Z\s]+)\s*(\d+(?:\.\d+)?)\s*(half|½)?/g,
-    /([a-zA-Z\s]+)/g
-  ]
+  for (const part of parts) {
+    const trimmedPart = part.trim()
+    if (!trimmedPart) continue
 
-  for (const pattern of patterns) {
-    let match
-    while ((match = pattern.exec(lowerText)) !== null) {
-      let quantity = 1
-      let item = ''
-
-      if (match[1] && match[3]) {
-        quantity = parseFloat(match[1])
-        if (match[2] === 'half' || match[2] === '½') quantity *= 0.5
-        item = match[3].trim()
-      } else if (match[1] && match[2]) {
-        item = match[1].trim()
-        quantity = parseFloat(match[2])
-        if (match[3] === 'half' || match[3] === '½') quantity *= 0.5
-      } else if (match[1]) {
-        item = match[1].trim()
-      }
-
-      if (item) {
-        items.push(item)
-        quantities.push(quantity)
-      }
+    // Extract quantity and item
+    const quantityMatch = trimmedPart.match(/^(\d+(?:\.\d+)?)\s*(half|½)?\s*(.+)$/)
+    if (quantityMatch) {
+      let quantity = parseFloat(quantityMatch[1])
+      if (quantityMatch[2] === 'half' || quantityMatch[2] === '½') quantity *= 0.5
+      const item = quantityMatch[3].trim()
+      items.push(item)
+      quantities.push(quantity)
+    } else {
+      // No quantity specified, assume 1
+      items.push(trimmedPart)
+      quantities.push(1)
     }
-  }
-
-  // If no specific parsing worked, treat the whole text as one item
-  if (items.length === 0) {
-    items.push(lowerText.trim())
-    quantities.push(1)
   }
 
   return { items, quantities }
