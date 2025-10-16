@@ -74,9 +74,9 @@ export default function CalendarPage() {
   }
 
   const getMealsForDate = (date: Date) => {
-    const dateString = date.toISOString().split('T')[0]
+    const dateString = date.toLocaleDateString('en-CA')
     return meals.filter(meal => {
-      const mealDate = meal.timestamp.toISOString().split('T')[0]
+      const mealDate = meal.timestamp.toLocaleDateString('en-CA')
       return mealDate === dateString
     })
   }
