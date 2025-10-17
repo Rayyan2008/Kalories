@@ -6,9 +6,11 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Calendar, Plus, Trash2, BarChart3, Brain, Apple, User, Home } from "lucide-react"
+import { Calendar, Plus, Trash2, BarChart3, Brain, Apple, User, Home, Search } from "lucide-react"
 import { useRouter } from "next/navigation"
 import ProfileSetupModal from "@/components/profile-setup-modal"
+import FoodSearch from "@/components/food-search"
+import { FoodItem, calculateNutrition } from "@/lib/food-database"
 
 interface MealEntry {
   id: string
@@ -18,6 +20,17 @@ interface MealEntry {
   carbs: number
   fat: number
   timestamp: Date
+  foodItems?: Array<{
+    food: FoodItem
+    quantity: number
+    unit: string
+    nutrition: {
+      calories: number
+      protein: number
+      carbs: number
+      fat: number
+    }
+  }>
 }
 
 export default function Dashboard() {
@@ -26,6 +39,7 @@ export default function Dashboard() {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [showProfileSetup, setShowProfileSetup] = useState(false)
   const [profileData, setProfileData] = useState<any>(null)
+  const [showFoodSearch, setShowFoodSearch] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -116,6 +130,31 @@ export default function Dashboard() {
     }
   }
 
+  const handleFoodSelect = (food: FoodItem, quantity: number, unit: string) => {
+    const nutrition = calculateNutrition(food, quantity, unit)
+    const mealText = `${quantity} ${unit} ${food.name}`
+
+    const newMeal: MealEntry = {
+      id: Date.now().toString(),
+      text: mealText,
+      calories: nutrition.calories,
+      protein: nutrition.protein,
+      carbs: nutrition.carbs,
+      fat: nutrition.fat,
+      timestamp: new Date(),
+      foodItems: [{
+        food,
+        quantity,
+        unit,
+        nutrition
+      }]
+    }
+
+    const updatedMeals = [newMeal, ...meals]
+    setMeals(updatedMeals)
+    localStorage.setItem("kalorie-meals", JSON.stringify(updatedMeals))
+  }
+
   const deleteMeal = (id: string) => {
     const updatedMeals = meals.filter(meal => meal.id !== id)
     setMeals(updatedMeals)
@@ -179,13 +218,23 @@ export default function Dashboard() {
                   onChange={(e) => setMealText(e.target.value)}
                   className="min-h-[100px]"
                 />
-                <Button
-                  onClick={analyzeMeal}
-                  disabled={!mealText.trim() || isAnalyzing}
-                  className="w-full"
-                >
-                  {isAnalyzing ? "Analyzing..." : "Analyze & Add Meal"}
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={analyzeMeal}
+                    disabled={!mealText.trim() || isAnalyzing}
+                    className="flex-1"
+                  >
+                    {isAnalyzing ? "Analyzing..." : "Analyze & Add Meal"}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowFoodSearch(true)}
+                    className="flex-1"
+                  >
+                    <Search className="h-4 w-4 mr-2" />
+                    Search Food
+                  </Button>
+                </div>
               </CardContent>
             </Card>
 
@@ -337,6 +386,14 @@ export default function Dashboard() {
         isOpen={showProfileSetup}
         onClose={() => setShowProfileSetup(false)}
       />
+
+      {/* Food Search Modal */}
+      {showFoodSearch && (
+        <FoodSearch
+          onFoodSelect={handleFoodSelect}
+          onClose={() => setShowFoodSearch(false)}
+        />
+      )}
     </div>
   )
 }
