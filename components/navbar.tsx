@@ -69,9 +69,9 @@ export default function Navbar() {
                   Contact
                 </Button>
               </Link>
-              <BetaSignupModal>
+              <Link href="/login">
                 <Button size="sm">Join Beta</Button>
-              </BetaSignupModal>
+              </Link>
             </>
           )}
           {isLoggedIn && (

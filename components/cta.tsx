@@ -13,11 +13,11 @@ export default function CTA() {
           The landing page should look sleek and modern, with a hero section explaining the main feature (type → see calories), followed by feature sections, screenshots/mockups, testimonials, and a CTA (Join Beta / Get Started).
         </p>
         <div className="flex gap-4">
-          <BetaSignupModal>
+          <Link href="/login">
             <Button size="lg" className="mt-4">
               Join Beta Now
             </Button>
-          </BetaSignupModal>
+          </Link>
           <Link href="/contact">
             <Button variant="outline" size="lg" className="mt-4">
               Contact Us
