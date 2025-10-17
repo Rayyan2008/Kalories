@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/button";
 
 const plans = [
   {
-    name: "Basic",
-    price: "$4.99",
-    period: "/month",
+    name: "Free",
+    price: "Free",
+    period: "",
     features: [
       "Unlimited meal logging",
       "Basic calorie tracking",
@@ -18,7 +18,7 @@ const plans = [
     price: "$9.99",
     period: "/month",
     features: [
-      "Everything in Basic",
+      "Everything in Free",
       "AI-powered meal analysis",
       "Advanced nutrition insights",
       "Calendar view",
@@ -78,7 +78,7 @@ export default function Pricing() {
                 className="w-full"
                 variant={index === 1 ? "default" : "outline"}
               >
-                {index === 2 ? "Start Premium" : "Get Started"}
+                {index === 0 ? "Get Started" : index === 2 ? "Start Premium" : "Upgrade to Pro"}
               </Button>
             </div>
           ))}
