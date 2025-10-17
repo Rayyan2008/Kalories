@@ -159,14 +159,14 @@ export default function Contact() {
                   <Mail className="w-6 h-6 text-primary" />
                   <div>
                     <h3 className="font-semibold text-card-foreground">Email</h3>
-                    <p className="text-muted-foreground">hello@kalorie.ai</p>
+                    <p className="text-muted-foreground">rayyanislam83@gmail.com</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
                   <Phone className="w-6 h-6 text-primary" />
                   <div>
                     <h3 className="font-semibold text-card-foreground">Phone</h3>
-                    <p className="text-muted-foreground">+1 (555) 123-4567</p>
+                    <p className="text-muted-foreground">+91 8882612872</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
@@ -174,8 +174,7 @@ export default function Contact() {
                   <div>
                     <h3 className="font-semibold text-card-foreground">Address</h3>
                     <p className="text-muted-foreground">
-                      123 Health Street<br />
-                      Wellness City, WC 12345
+                      JAMIA NAGAR, NEW DELHI 110025
                     </p>
                   </div>
                 </div>

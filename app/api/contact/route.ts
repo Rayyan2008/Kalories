@@ -42,7 +42,6 @@ export async function POST(request: NextRequest) {
     // - Or any other email service
 
     // Example with a hypothetical email service:
-    /*
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -51,7 +50,7 @@ export async function POST(request: NextRequest) {
       },
       body: JSON.stringify({
         from: 'noreply@kalorie.ai',
-        to: 'hello@kalorie.ai',
+        to: 'rayyanislam83@gmail.com',
         subject: `New Contact Form: ${subject}`,
         html: `
           <h2>New Contact Form Submission</h2>
@@ -63,7 +62,6 @@ export async function POST(request: NextRequest) {
         `,
       }),
     })
-    */
 
     return NextResponse.json({
       success: true,
