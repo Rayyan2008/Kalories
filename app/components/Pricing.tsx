@@ -41,8 +41,13 @@ const plans = [
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="py-20 bg-gray-50 dark:bg-background">
-      <div className="container mx-auto">
+    <section id="pricing" className="py-20 bg-background relative">
+      {/* Background gradients to match landing page */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute right-0 top-0 h-[300px] w-[300px] bg-blue-500/5 blur-[80px]" />
+        <div className="absolute bottom-0 left-0 h-[300px] w-[300px] bg-purple-500/5 blur-[80px]" />
+      </div>
+      <div className="container mx-auto relative z-10">
         <h2 className="text-3xl font-bold text-center mb-12 text-foreground">
           Choose Your Plan
         </h2>
@@ -50,7 +55,7 @@ export default function Pricing() {
           {plans.map((plan, index) => (
             <div
               key={index}
-              className="bg-card p-8 rounded-lg shadow-md"
+              className="bg-card/50 backdrop-blur-sm border border-border/50 p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
             >
               <h3 className="text-2xl font-bold mb-4 text-card-foreground">
                 {plan.name}
