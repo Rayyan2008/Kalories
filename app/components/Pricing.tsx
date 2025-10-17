@@ -50,22 +50,22 @@ export default function Pricing() {
           {plans.map((plan, index) => (
             <div
               key={index}
-              className="bg-white dark:bg-card p-8 rounded-lg shadow-md dark:shadow-lg"
+              className="bg-card p-8 rounded-lg shadow-md"
             >
-              <h3 className="text-2xl font-bold mb-4 text-foreground">
+              <h3 className="text-2xl font-bold mb-4 text-card-foreground">
                 {plan.name}
               </h3>
-              <p className="text-4xl font-bold mb-6 text-foreground">
+              <p className="text-4xl font-bold mb-6 text-card-foreground">
                 {plan.price}
-                <span className="text-lg font-normal text-gray-600 dark:text-muted-foreground">
+                <span className="text-lg font-normal text-muted-foreground">
                   {plan.period}
                 </span>
               </p>
               <ul className="mb-8">
                 {plan.features.map((feature, featureIndex) => (
                   <li key={featureIndex} className="flex items-center mb-2">
-                    <Check className="h-5 w-5 text-primary dark:text-foreground mr-2" />
-                    <span className="text-foreground">{feature}</span>
+                    <Check className="h-5 w-5 text-primary mr-2" />
+                    <span className="text-card-foreground">{feature}</span>
                   </li>
                 ))}
               </ul>
