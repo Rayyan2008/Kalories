@@ -25,13 +25,23 @@ export default function LoginPage() {
 
   useEffect(() => {
     // Initialize Facebook SDK
-    window.fbAsyncInit = function() {
+    if (window.FB) {
       window.FB.init({
         appId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID,
         cookie: true,
         xfbml: true,
         version: 'v18.0'
       })
+    } else {
+      // If FB SDK is not loaded yet, set up the init function
+      window.fbAsyncInit = function() {
+        window.FB.init({
+          appId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID,
+          cookie: true,
+          xfbml: true,
+          version: 'v18.0'
+        })
+      }
     }
   }, [])
 
