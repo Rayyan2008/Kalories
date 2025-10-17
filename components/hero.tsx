@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
+import Link from "next/link"
 import BetaSignupModal from "@/components/beta-signup-modal"
 
 export default function Hero() {
@@ -20,11 +21,11 @@ export default function Hero() {
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </BetaSignupModal>
-        <BetaSignupModal>
+        <Link href="/contact">
           <Button variant="outline" size="lg">
-            Get Started
+            Contact Us
           </Button>
-        </BetaSignupModal>
+        </Link>
       </div>
     </section>
   )

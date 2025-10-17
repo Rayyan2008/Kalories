@@ -41,13 +41,8 @@ const plans = [
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="py-20 bg-background relative">
-      {/* Background gradients to match landing page */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute right-0 top-0 h-[300px] w-[300px] bg-blue-500/5 blur-[80px]" />
-        <div className="absolute bottom-0 left-0 h-[300px] w-[300px] bg-purple-500/5 blur-[80px]" />
-      </div>
-      <div className="container mx-auto relative z-10">
+    <section id="pricing" className="py-20 bg-background">
+      <div className="container mx-auto">
         <h2 className="text-3xl font-bold text-center mb-12 text-foreground">
           Choose Your Plan
         </h2>
@@ -55,7 +50,7 @@ export default function Pricing() {
           {plans.map((plan, index) => (
             <div
               key={index}
-              className="bg-card/50 backdrop-blur-sm border border-border/50 p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+              className="bg-card/50 backdrop-blur-sm border border-border/50 p-8 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
             >
               <h3 className="text-2xl font-bold mb-4 text-card-foreground">
                 {plan.name}
@@ -78,7 +73,7 @@ export default function Pricing() {
                 className="w-full"
                 variant={index === 1 ? "default" : "outline"}
               >
-                {index === 0 ? "Get Started" : index === 2 ? "Start Premium" : "Upgrade to Pro"}
+                {index === 0 ? "Get Started" : index === 1 ? "Upgrade to Pro" : "Start Premium"}
               </Button>
             </div>
           ))}

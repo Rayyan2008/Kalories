@@ -64,9 +64,11 @@ export default function Navbar() {
           </Link>
           {!isLoggedIn && (
             <>
-              <Button variant="ghost" size="sm">
-                Contact
-              </Button>
+              <Link href="/contact">
+                <Button variant="ghost" size="sm">
+                  Contact
+                </Button>
+              </Link>
               <BetaSignupModal>
                 <Button size="sm">Join Beta</Button>
               </BetaSignupModal>

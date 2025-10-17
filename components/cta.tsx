@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 import BetaSignupModal from "@/components/beta-signup-modal"
 
 export default function CTA() {
@@ -11,11 +12,18 @@ export default function CTA() {
         <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
           The landing page should look sleek and modern, with a hero section explaining the main feature (type → see calories), followed by feature sections, screenshots/mockups, testimonials, and a CTA (Join Beta / Get Started).
         </p>
-        <BetaSignupModal>
-          <Button size="lg" className="mt-4">
-            Join Beta Now
-          </Button>
-        </BetaSignupModal>
+        <div className="flex gap-4">
+          <BetaSignupModal>
+            <Button size="lg" className="mt-4">
+              Join Beta Now
+            </Button>
+          </BetaSignupModal>
+          <Link href="/contact">
+            <Button variant="outline" size="lg" className="mt-4">
+              Contact Us
+            </Button>
+          </Link>
+        </div>
       </div>
     </section>
   )
