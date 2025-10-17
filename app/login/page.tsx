@@ -141,13 +141,22 @@ export default function LoginPage() {
             </Button>
           </div>
 
-          <div className="text-center">
+          <div className="text-center space-y-2">
             <a
               href="#"
               className="text-sm text-card-foreground/70 hover:text-card-foreground font-sans transition-colors"
             >
               Forgot your password?
             </a>
+            <div className="text-sm text-card-foreground/60 font-sans">
+              Don't have an account?{" "}
+              <a
+                href="/register"
+                className="text-primary hover:text-primary/80 font-medium transition-colors"
+              >
+                Sign up
+              </a>
+            </div>
           </div>
         </CardContent>
       </Card>
