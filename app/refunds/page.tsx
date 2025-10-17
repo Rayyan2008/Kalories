@@ -77,10 +77,11 @@ export default function RefundsPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4 text-foreground">7. Contact Information</h2>
             <p className="text-muted-foreground mb-4">
-              For refund requests or cancellation assistance, please contact us at:
+              For refund requests or cancellation assistance, please contact us:
             </p>
-            <ul className="list-disc pl-6 text-muted-foreground mb-4">
-              <li>Email: support@kalorie.ai</li>
+            <ul className="text-muted-foreground mb-4">
+              <li>Email: rayyanislam83@gmail.com</li>
+              <li>Phone: +91 8882612872</li>
               <li>Response time: Within 24 hours</li>
             </ul>
           </section>

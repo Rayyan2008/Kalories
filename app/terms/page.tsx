@@ -63,8 +63,12 @@ export default function TermsPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4 text-foreground">8. Contact Information</h2>
             <p className="text-muted-foreground mb-4">
-              If you have any questions about these Terms and Conditions, please contact us at support@kalorie.ai
+              If you have any questions about these Terms and Conditions, please contact us:
             </p>
+            <ul className="text-muted-foreground mb-4">
+              <li>Email: rayyanislam83@gmail.com</li>
+              <li>Phone: +91 8882612872</li>
+            </ul>
           </section>
         </div>
       </div>
