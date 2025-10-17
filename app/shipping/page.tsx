@@ -65,10 +65,11 @@ export default function ShippingPage() {
             <p className="text-muted-foreground mb-4">
               For questions about service delivery or technical support, please contact us:
             </p>
-            <ul className="text-muted-foreground mb-4">
-              <li>Email: rayyanislam83@gmail.com</li>
-              <li>Phone: +91 8882612872</li>
-            </ul>
+            <div className="text-muted-foreground mb-4">
+              <p><strong>Email:</strong> rayyanislam83@gmail.com</p>
+              <p><strong>Phone:</strong> +91 8882612872</p>
+              <p><strong>Address:</strong> JAMIA NAGAR, NEW DELHI 110025</p>
+            </div>
           </section>
         </div>
       </div>

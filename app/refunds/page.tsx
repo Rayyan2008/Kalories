@@ -79,11 +79,12 @@ export default function RefundsPage() {
             <p className="text-muted-foreground mb-4">
               For refund requests or cancellation assistance, please contact us:
             </p>
-            <ul className="text-muted-foreground mb-4">
-              <li>Email: rayyanislam83@gmail.com</li>
-              <li>Phone: +91 8882612872</li>
-              <li>Response time: Within 24 hours</li>
-            </ul>
+            <div className="text-muted-foreground mb-4">
+              <p><strong>Email:</strong> rayyanislam83@gmail.com</p>
+              <p><strong>Phone:</strong> +91 8882612872</p>
+              <p><strong>Address:</strong> JAMIA NAGAR, NEW DELHI 110025</p>
+              <p><strong>Response time:</strong> Within 24 hours</p>
+            </div>
           </section>
         </div>
       </div>
