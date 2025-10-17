@@ -24,12 +24,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
-        <script
-          async
-          defer
-          crossOrigin="anonymous"
-          src="https://connect.facebook.net/en_US/sdk.js"
-        ></script>
       </head>
       <body className={`${inter.className} bg-background text-foreground antialiased`}>
         <Providers>
