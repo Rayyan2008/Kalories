@@ -5,46 +5,58 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
 import { useRouter } from "next/navigation"
 
-export default function LoginPage() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+export default function RegisterPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: ""
+  })
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }))
+  }
+
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords don't match")
+      return
+    }
+
     setIsLoading(true)
 
     try {
-      // Simulate login
+      // Simulate registration
       await new Promise(resolve => setTimeout(resolve, 1000))
 
-      // Check if user exists in localStorage (in a real app, this would be API call)
-      const authData = localStorage.getItem("kalorie-auth")
-      if (authData) {
-        const { user } = JSON.parse(authData)
-        if (user.email === email) {
-          localStorage.setItem("kalorie-auth", JSON.stringify({
-            isLoggedIn: true,
-            user
-          }))
-          router.push("/dashboard")
-          return
+      // Store user data (in a real app, this would be handled by your auth system)
+      localStorage.setItem("kalorie-auth", JSON.stringify({
+        isLoggedIn: true,
+        user: {
+          name: formData.name,
+          email: formData.email
         }
-      }
+      }))
 
-      alert("Invalid credentials")
+      router.push("/dashboard")
     } catch (error) {
-      console.error("Login failed:", error)
+      console.error("Registration failed:", error)
     } finally {
       setIsLoading(false)
     }
   }
 
   const handleSocialLogin = (provider: string) => {
-    console.log("[v0] Social login with:", provider)
+    console.log("[v0] Social register with:", provider)
   }
 
   return (
@@ -60,25 +72,42 @@ export default function LoginPage() {
         <Card className="w-full max-w-md hover-lift shadow-2xl">
           <CardHeader className="text-center space-y-2">
             <CardTitle className="text-3xl font-bold font-sans text-card-foreground">
-              Welcome Back
+              Create Account
             </CardTitle>
             <CardDescription className="text-card-foreground/70 font-sans">
-              Sign in to your account to continue
+              Join Kalorie AI and start your journey
             </CardDescription>
           </CardHeader>
 
           <CardContent className="space-y-6">
-            <form onSubmit={handleLogin} className="space-y-4">
+            <form onSubmit={handleRegister} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="name" className="text-sm font-medium text-card-foreground font-sans">
+                  Full Name
+                </Label>
+                <Input
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="Enter your full name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  className="py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"
+                  required
+                />
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-medium text-card-foreground font-sans">
                   Email Address
                 </Label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formData.email}
+                  onChange={handleInputChange}
                   className="py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"
                   required
                 />
@@ -90,10 +119,27 @@ export default function LoginPage() {
                 </Label>
                 <Input
                   id="password"
+                  name="password"
                   type="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Create a password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  className="py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword" className="text-sm font-medium text-card-foreground font-sans">
+                  Confirm Password
+                </Label>
+                <Input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  placeholder="Confirm your password"
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange}
                   className="py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"
                   required
                 />
@@ -104,7 +150,7 @@ export default function LoginPage() {
                 className="w-full ripple-effect hover-lift font-sans font-bold py-5 transition-all duration-300"
                 disabled={isLoading}
               >
-                {isLoading ? "Signing In..." : "Sign In"}
+                {isLoading ? "Creating Account..." : "Create Account"}
               </Button>
             </form>
 
@@ -164,22 +210,16 @@ export default function LoginPage() {
               </Button>
             </div>
 
-            <div className="text-center space-y-2">
-              <a
-                href="#"
-                className="text-sm text-card-foreground/70 hover:text-card-foreground font-sans transition-colors"
-              >
-                Forgot your password?
-              </a>
-              <div className="text-sm text-card-foreground/60 font-sans">
-                Don't have an account?{" "}
+            <div className="text-center">
+              <span className="text-sm text-card-foreground/60 font-sans">
+                Already have an account?{" "}
                 <a
-                  href="/register"
+                  href="/login"
                   className="text-primary hover:text-primary/80 font-medium transition-colors"
                 >
-                  Sign up
+                  Sign in
                 </a>
-              </div>
+              </span>
             </div>
           </CardContent>
         </Card>
