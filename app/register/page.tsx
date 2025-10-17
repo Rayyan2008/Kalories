@@ -1,12 +1,22 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { ArrowLeft } from "lucide-react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { signIn } from "next-auth/react"
+
+declare global {
+  interface Window {
+    FB: any
+    fbAsyncInit: () => void
+  }
+}
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -17,6 +27,18 @@ export default function RegisterPage() {
   })
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+
+  useEffect(() => {
+    // Initialize Facebook SDK
+    window.fbAsyncInit = function() {
+      window.FB.init({
+        appId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID,
+        cookie: true,
+        xfbml: true,
+        version: 'v18.0'
+      })
+    }
+  }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -55,8 +77,48 @@ export default function RegisterPage() {
     }
   }
 
-  const handleSocialLogin = (provider: string) => {
-    console.log("[v0] Social register with:", provider)
+  const handleFacebookLogin = () => {
+    if (!window.FB) {
+      alert("Facebook SDK not loaded")
+      return
+    }
+
+    window.FB.login((response: any) => {
+      if (response.authResponse) {
+        // User is logged in, get user info
+        window.FB.api('/me', { fields: 'name,email,picture' }, (userInfo: any) => {
+          console.log('Facebook login successful:', userInfo)
+          // Here you would typically send this data to your backend
+          // For now, we'll just redirect to dashboard
+          router.push('/dashboard')
+        })
+      } else {
+        console.log('Facebook login cancelled or failed')
+      }
+    }, { scope: 'email,public_profile' })
+  }
+
+  const handleSocialLogin = async (provider: string) => {
+    if (provider === "Facebook") {
+      handleFacebookLogin()
+      return
+    }
+
+    try {
+      const result = await signIn(provider.toLowerCase(), {
+        callbackUrl: "/dashboard",
+        redirect: false,
+      })
+      if (result?.error) {
+        console.error("Social login error:", result.error)
+        alert("Login failed. Please try again.")
+      } else if (result?.url) {
+        router.push(result.url)
+      }
+    } catch (error) {
+      console.error("Social login failed:", error)
+      alert("Login failed. Please try again.")
+    }
   }
 
   return (
@@ -66,6 +128,16 @@ export default function RegisterPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background" />
         <div className="absolute right-0 top-0 h-[500px] w-[500px] bg-blue-500/10 blur-[100px]" />
         <div className="absolute bottom-0 left-0 h-[500px] w-[500px] bg-purple-500/10 blur-[100px]" />
+      </div>
+
+      {/* Home Button */}
+      <div className="absolute top-4 left-4 z-20">
+        <Link href="/">
+          <Button variant="outline" size="sm">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Home
+          </Button>
+        </Link>
       </div>
 
       <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
