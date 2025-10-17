@@ -57,7 +57,7 @@ export default function LoginPage() {
       </div>
 
       <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
-        <Card className="w-full max-w-md hover-lift shadow-2xl">
+        <Card className="w-full max-w-sm hover-lift shadow-2xl">
           <CardHeader className="text-center space-y-2">
             <CardTitle className="text-3xl font-bold font-sans text-card-foreground">
               Welcome Back
