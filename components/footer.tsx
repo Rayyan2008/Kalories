@@ -9,7 +9,7 @@ export default function Footer() {
           <h2 className="font-bold">Kalorie AI</h2>
           <p className="text-sm text-muted-foreground">Your smart companion for calorie tracking and healthy living.</p>
         </div>
-        <div className="grid flex-1 grid-cols-2 gap-12 sm:grid-cols-3">
+        <div className="grid flex-1 grid-cols-2 gap-12 sm:grid-cols-4">
           <div className="space-y-4">
             <h3 className="text-sm font-medium">Features</h3>
             <ul className="space-y-3 text-sm">
@@ -41,6 +41,36 @@ export default function Footer() {
               <li>
                 <Link href="/contact" className="text-muted-foreground transition-colors hover:text-primary">
                   Contact
+                </Link>
+              </li>
+              <li>
+                <Link href="/pricing" className="text-muted-foreground transition-colors hover:text-primary">
+                  Pricing
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div className="space-y-4">
+            <h3 className="text-sm font-medium">Legal</h3>
+            <ul className="space-y-3 text-sm">
+              <li>
+                <Link href="/privacy" className="text-muted-foreground transition-colors hover:text-primary">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="text-muted-foreground transition-colors hover:text-primary">
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link href="/refunds" className="text-muted-foreground transition-colors hover:text-primary">
+                  Refunds
+                </Link>
+              </li>
+              <li>
+                <Link href="/shipping" className="text-muted-foreground transition-colors hover:text-primary">
+                  Shipping
                 </Link>
               </li>
             </ul>
