@@ -1,31 +1,14 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useSession, signOut } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Github } from "lucide-react"
 import BetaSignupModal from "@/components/beta-signup-modal"
 
 export default function Navbar() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-
-  useEffect(() => {
-    const checkAuth = () => {
-      const auth = localStorage.getItem("kalorie-auth")
-      setIsLoggedIn(auth ? JSON.parse(auth).isLoggedIn : false)
-    }
-
-    checkAuth()
-    window.addEventListener("storage", checkAuth)
-    return () => window.removeEventListener("storage", checkAuth)
-  }, [])
-
-  const handleLogout = () => {
-    localStorage.removeItem("kalorie-auth")
-    localStorage.removeItem("kalorie-meals")
-    setIsLoggedIn(false)
-    window.location.href = "/"
-  }
+  const { data: session, status } = useSession()
+  const isLoggedIn = !!session
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -81,7 +64,7 @@ export default function Navbar() {
                   Dashboard
                 </Button>
               </Link>
-              <Button variant="ghost" size="sm" onClick={handleLogout}>
+              <Button variant="ghost" size="sm" onClick={() => signOut()}>
                 Logout
               </Button>
             </>

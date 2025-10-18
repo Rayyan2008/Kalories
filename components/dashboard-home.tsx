@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
+import { useSession, signOut } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Calendar, BarChart3, Brain, Dumbbell, ArrowRight } from "lucide-react"
@@ -40,15 +41,16 @@ const dashboardOptions = [
 
 export default function DashboardHome() {
   const router = useRouter()
+  const { data: session, status } = useSession()
 
   useEffect(() => {
     // Check authentication
-    const auth = localStorage.getItem("kalorie-auth")
-    if (!auth) {
+    if (status === "loading") return // Still loading
+    if (!session) {
       router.push("/login")
       return
     }
-  }, [router])
+  }, [session, status, router])
 
   return (
     <div className="relative min-h-screen">
@@ -75,11 +77,7 @@ export default function DashboardHome() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => {
-                  localStorage.removeItem("kalorie-auth")
-                  localStorage.removeItem("kalorie-meals")
-                  router.push("/")
-                }}
+                onClick={() => signOut()}
               >
                 Logout
               </Button>
