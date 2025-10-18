@@ -1,6 +1,8 @@
 "use client"
 
 import { useEffect } from "react"
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
 import Navbar from "@/components/navbar"
 import Hero from "@/components/hero"
 import Features from "@/components/features"
@@ -12,20 +14,16 @@ import CTA from "@/components/cta"
 import Footer from "@/components/footer"
 
 export default function Home() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+
   useEffect(() => {
     // Check if user is already logged in and redirect to dashboard
-    const authData = localStorage.getItem("kalorie-auth")
-    if (authData) {
-      try {
-        const { isLoggedIn } = JSON.parse(authData)
-        if (isLoggedIn) {
-          window.location.href = "/dashboard"
-        }
-      } catch (error) {
-        console.error("Error parsing auth data:", error)
-      }
+    if (status === "loading") return // Still loading
+    if (session) {
+      router.push("/dashboard")
     }
-  }, [])
+  }, [session, status, router])
 
   return (
     <div className="relative min-h-screen">

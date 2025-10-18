@@ -50,13 +50,11 @@ export default function LoginPage() {
     try {
       const result = await signIn(provider.toLowerCase(), {
         callbackUrl: "/dashboard",
-        redirect: false,
+        redirect: true,
       })
       if (result?.error) {
         console.error("Social login error:", result.error)
         alert("Login failed. Please try again.")
-      } else if (result?.url) {
-        router.push(result.url)
       }
     } catch (error) {
       console.error("Social login failed:", error)

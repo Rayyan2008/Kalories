@@ -63,17 +63,26 @@ export const authOptions: NextAuthOptions = {
     signIn: "/login",
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user) {
         token.id = user.id
+      }
+      // Handle social login providers
+      if (account?.provider === "google" || account?.provider === "github" || account?.provider === "facebook") {
+        token.provider = account.provider
       }
       return token
     },
     async session({ session, token }) {
       if (token && session.user) {
         (session.user as any).id = token.id as string
+        (session.user as any).provider = token.provider as string
       }
       return session
+    },
+    async signIn({ user, account, profile }) {
+      // Allow sign in for all providers
+      return true
     },
   },
 }

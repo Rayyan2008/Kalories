@@ -8,6 +8,9 @@
 ## Tasks
 - [x] Update navbar.tsx to use NextAuth session instead of localStorage
 - [x] Update dashboard-home.tsx to use NextAuth session instead of localStorage
+- [x] Update app/page.tsx to use NextAuth session for redirect
+- [x] Update lib/auth.ts callbacks for proper session handling
+- [x] Update login page social login redirect behavior
 - [ ] Test social login flow to ensure user details are accessible
 - [x] Update logout functionality to use NextAuth signOut
 - [ ] Verify user details (name, email, image) are stored and accessible from session
