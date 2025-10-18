@@ -6,5 +6,11 @@
     "app/api/**/*.ts": {
       "maxDuration": 10
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/api/auth/:path*",
+      "destination": "/api/auth/[...nextauth]"
+    }
+  ]
 }
