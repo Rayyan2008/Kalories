@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -41,16 +42,18 @@ export default function Dashboard() {
   const [profileData, setProfileData] = useState<any>(null)
   const [showFoodSearch, setShowFoodSearch] = useState(false)
   const router = useRouter()
+  const { data: session, status } = useSession()
 
   useEffect(() => {
-    // Check authentication
-    const auth = localStorage.getItem("kalorie-auth")
-    if (!auth) {
+    // Wait for session loading to finish
+    if (status === "loading") return
+    // Redirect to login if unauthenticated
+    if (!session) {
       router.push("/login")
       return
     }
 
-    // Check if profile is set up
+    // Check if profile is set up (still stored in localStorage for now)
     const profile = localStorage.getItem("kalorie-profile")
     if (!profile) {
       setShowProfileSetup(true)
@@ -58,7 +61,7 @@ export default function Dashboard() {
       setProfileData(JSON.parse(profile))
     }
 
-    // Load saved meals
+    // Load saved meals (still localStorage until DB integration)
     const savedMeals = localStorage.getItem("kalorie-meals")
     if (savedMeals) {
       const parsedMeals = JSON.parse(savedMeals).map((meal: any) => ({
@@ -67,7 +70,7 @@ export default function Dashboard() {
       }))
       setMeals(parsedMeals)
     }
-  }, [router])
+  }, [router, session, status])
 
   const analyzeMeal = async () => {
     if (!mealText.trim()) return

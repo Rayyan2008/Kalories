@@ -44,15 +44,11 @@ export default function DashboardHome() {
   const { data: session, status } = useSession()
 
   useEffect(() => {
-    // Check authentication
+    // Check authentication via NextAuth session
     if (status === "loading") return // Still loading
     if (!session) {
-      // Check localStorage for demo auth
-      const authData = localStorage.getItem("kalorie-auth")
-      if (!authData) {
-        router.push("/login")
-        return
-      }
+      router.push("/login")
+      return
     }
   }, [session, status, router])
 

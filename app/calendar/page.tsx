@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowLeft, Calendar, Flame, Target } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect } from "react"
+import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 
 interface MealEntry {
@@ -24,16 +25,17 @@ export default function CalendarPage() {
   const [meals, setMeals] = useState<MealEntry[]>([])
   const [profileData, setProfileData] = useState<any>(null)
   const router = useRouter()
+  const { data: session, status } = useSession()
 
   useEffect(() => {
-    // Check authentication
-    const auth = localStorage.getItem("kalorie-auth")
-    if (!auth) {
+    // Gate page by NextAuth session
+    if (status === "loading") return
+    if (!session) {
       router.push("/login")
       return
     }
 
-    // Load meals
+    // Load meals (localStorage fallback until backend persistence)
     const savedMeals = localStorage.getItem("kalorie-meals")
     if (savedMeals) {
       const parsedMeals = JSON.parse(savedMeals).map((meal: any) => ({
@@ -48,7 +50,7 @@ export default function CalendarPage() {
     if (profile) {
       setProfileData(JSON.parse(profile))
     }
-  }, [router])
+  }, [router, session, status])
 
   const getDaysInMonth = (date: Date) => {
     const year = date.getFullYear()
