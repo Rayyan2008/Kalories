@@ -77,8 +77,28 @@ export default function LoginPage() {
         return
       }
 
-      // On success, NextAuth returns a `url` we should navigate to
+      // On success, NextAuth returns a `url`. Wait for the session to be available
+      // (sometimes the session cookie is set right after the provider redirect)
       if (result?.url) {
+        const maxAttempts = 10
+        const delay = (ms: number) => new Promise(res => setTimeout(res, ms))
+        for (let i = 0; i < maxAttempts; i++) {
+          try {
+            const r = await fetch('/api/auth/session')
+            if (r.ok) {
+              const data = await r.json()
+              if (data?.user) {
+                router.push(result.url)
+                return
+              }
+            }
+          } catch (err) {
+            // ignore and retry
+          }
+          await delay(500)
+        }
+
+        // Fallback: navigate anyway; user may still be signed in server-side
         router.push(result.url)
       }
     } catch (error) {
