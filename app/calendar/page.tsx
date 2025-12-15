@@ -30,10 +30,7 @@ export default function CalendarPage() {
   useEffect(() => {
     // Gate page by NextAuth session
     if (status === "loading") return
-    if (!session) {
-      router.push("/login")
-      return
-    }
+    if (!session) return
 
     // Load meals (localStorage fallback until backend persistence)
     const savedMeals = localStorage.getItem("kalorie-meals")

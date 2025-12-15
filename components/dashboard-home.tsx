@@ -46,10 +46,7 @@ export default function DashboardHome() {
   useEffect(() => {
     // Check authentication via NextAuth session
     if (status === "loading") return // Still loading
-    if (!session) {
-      router.push("/login")
-      return
-    }
+    if (!session) return
   }, [session, status, router])
 
   return (

@@ -48,10 +48,7 @@ export default function Dashboard() {
     // Wait for session loading to finish
     if (status === "loading") return
     // Redirect to login if unauthenticated
-    if (!session) {
-      router.push("/login")
-      return
-    }
+    if (!session) return
 
     // Check if profile is set up (still stored in localStorage for now)
     const profile = localStorage.getItem("kalorie-profile")
