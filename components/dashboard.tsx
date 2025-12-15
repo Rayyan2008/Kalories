@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useSession } from "next-auth/react"
+import { useSession, signOut } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -61,15 +61,35 @@ export default function Dashboard() {
       setProfileData(JSON.parse(profile))
     }
 
-    // Load saved meals (still localStorage until DB integration)
-    const savedMeals = localStorage.getItem("kalorie-meals")
-    if (savedMeals) {
-      const parsedMeals = JSON.parse(savedMeals).map((meal: any) => ({
-        ...meal,
-        timestamp: new Date(meal.timestamp)
-      }))
-      setMeals(parsedMeals)
-    }
+    // Load meals from API
+    ;(async () => {
+      try {
+        const res = await fetch('/api/meals')
+        if (!res.ok) throw new Error('Failed to load meals')
+        const data = await res.json()
+        const parsedMeals = data.map((m: any) => ({
+          id: m.id,
+          text: m.text,
+          calories: m.calories,
+          protein: m.protein,
+          carbs: m.carbs,
+          fat: m.fat,
+          timestamp: new Date(m.date),
+          foodItems: m.items || undefined,
+        }))
+        setMeals(parsedMeals)
+      } catch (err) {
+        console.error('Failed loading meals from API, falling back to localStorage', err)
+        const savedMeals = localStorage.getItem("kalorie-meals")
+        if (savedMeals) {
+          const parsedMeals = JSON.parse(savedMeals).map((meal: any) => ({
+            ...meal,
+            timestamp: new Date(meal.timestamp)
+          }))
+          setMeals(parsedMeals)
+        }
+      }
+    })()
   }, [router, session, status])
 
   const analyzeMeal = async () => {
@@ -93,19 +113,31 @@ export default function Dashboard() {
 
       const data = await response.json()
 
+      // Persist meal to backend
+      const createRes = await fetch('/api/meals', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: mealText,
+          calories: data.calories,
+          protein: data.protein,
+          carbs: data.carbs,
+          fat: data.fat,
+        }),
+      })
+      if (!createRes.ok) throw new Error('Failed to create meal')
+      const created = await createRes.json()
       const newMeal: MealEntry = {
-        id: Date.now().toString(),
-        text: mealText,
-        calories: data.calories,
-        protein: data.protein,
-        carbs: data.carbs,
-        fat: data.fat,
-        timestamp: new Date()
+        id: created.id,
+        text: created.text,
+        calories: created.calories,
+        protein: created.protein,
+        carbs: created.carbs,
+        fat: created.fat,
+        timestamp: new Date(created.date),
       }
 
-      const updatedMeals = [newMeal, ...meals]
-      setMeals(updatedMeals)
-      localStorage.setItem("kalorie-meals", JSON.stringify(updatedMeals))
+      setMeals(prev => [newMeal, ...prev])
       setMealText("")
     } catch (error) {
       console.error('Error analyzing meal:', error)
@@ -117,6 +149,38 @@ export default function Dashboard() {
         fat: Math.floor(Math.random() * 20) + 2
       }
 
+      const newMealData = {
+        text: mealText,
+        calories: mockData.calories,
+        protein: mockData.protein,
+        carbs: mockData.carbs,
+        fat: mockData.fat,
+      }
+      try {
+        const createRes = await fetch('/api/meals', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newMealData),
+        })
+        if (createRes.ok) {
+          const created = await createRes.json()
+          const newMeal: MealEntry = {
+            id: created.id,
+            text: created.text,
+            calories: created.calories,
+            protein: created.protein,
+            carbs: created.carbs,
+            fat: created.fat,
+            timestamp: new Date(created.date),
+          }
+          setMeals(prev => [newMeal, ...prev])
+          setMealText("")
+          return
+        }
+      } catch (err) {
+        console.error('Failed to persist mock meal', err)
+      }
+
       const newMeal: MealEntry = {
         id: Date.now().toString(),
         text: mealText,
@@ -124,9 +188,8 @@ export default function Dashboard() {
         timestamp: new Date()
       }
 
-      const updatedMeals = [newMeal, ...meals]
-      setMeals(updatedMeals)
-      localStorage.setItem("kalorie-meals", JSON.stringify(updatedMeals))
+      setMeals(prev => [newMeal, ...prev])
+      localStorage.setItem("kalorie-meals", JSON.stringify([newMeal, ...meals]))
       setMealText("")
     } finally {
       setIsAnalyzing(false)
@@ -137,37 +200,86 @@ export default function Dashboard() {
     const nutrition = calculateNutrition(food, quantity, unit)
     const mealText = `${quantity} ${unit} ${food.name}`
 
-    const newMeal: MealEntry = {
-      id: Date.now().toString(),
-      text: mealText,
-      calories: nutrition.calories,
-      protein: nutrition.protein,
-      carbs: nutrition.carbs,
-      fat: nutrition.fat,
-      timestamp: new Date(),
-      foodItems: [{
-        food,
-        quantity,
-        unit,
-        nutrition
-      }]
-    }
+    ;(async () => {
+      try {
+        const res = await fetch('/api/meals', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            text: mealText,
+            calories: nutrition.calories,
+            protein: nutrition.protein,
+            carbs: nutrition.carbs,
+            fat: nutrition.fat,
+            items: [{
+              foodId: food.id,
+              quantity,
+              unit,
+              calories: nutrition.calories,
+              protein: nutrition.protein,
+              carbs: nutrition.carbs,
+              fat: nutrition.fat,
+            }]
+          }),
+        })
+        if (res.ok) {
+          const created = await res.json()
+          const newMeal: MealEntry = {
+            id: created.id,
+            text: created.text,
+            calories: created.calories,
+            protein: created.protein,
+            carbs: created.carbs,
+            fat: created.fat,
+            timestamp: new Date(created.date),
+            foodItems: created.items || undefined,
+          }
+          setMeals(prev => [newMeal, ...prev])
+          return
+        }
+      } catch (err) {
+        console.error('Failed to persist selected food meal', err)
+      }
 
-    const updatedMeals = [newMeal, ...meals]
-    setMeals(updatedMeals)
-    localStorage.setItem("kalorie-meals", JSON.stringify(updatedMeals))
+      const newMeal: MealEntry = {
+        id: Date.now().toString(),
+        text: mealText,
+        calories: nutrition.calories,
+        protein: nutrition.protein,
+        carbs: nutrition.carbs,
+        fat: nutrition.fat,
+        timestamp: new Date(),
+        foodItems: [{ food, quantity, unit, nutrition }]
+      }
+      setMeals(prev => [newMeal, ...prev])
+      localStorage.setItem("kalorie-meals", JSON.stringify([newMeal, ...meals]))
+    })()
   }
 
   const deleteMeal = (id: string) => {
-    const updatedMeals = meals.filter(meal => meal.id !== id)
-    setMeals(updatedMeals)
-    localStorage.setItem("kalorie-meals", JSON.stringify(updatedMeals))
+    ;(async () => {
+      try {
+        const res = await fetch(`/api/meals/${id}`, { method: 'DELETE' })
+        if (res.ok) {
+          setMeals(prev => prev.filter(m => m.id !== id))
+          return
+        }
+      } catch (err) {
+        console.error('Failed to delete meal via API', err)
+      }
+
+      // fallback local removal
+      const updatedMeals = meals.filter(meal => meal.id !== id)
+      setMeals(updatedMeals)
+      localStorage.setItem("kalorie-meals", JSON.stringify(updatedMeals))
+    })()
   }
 
   const logout = () => {
-    localStorage.removeItem("kalorie-auth")
+    // Sign out via NextAuth and clear client-side data
+    localStorage.removeItem("kalorie-profile")
     localStorage.removeItem("kalorie-meals")
-    router.push("/")
+    signOut({ callbackUrl: '/' })
   }
 
   const totalCalories = meals.reduce((sum, meal) => sum + meal.calories, 0)
