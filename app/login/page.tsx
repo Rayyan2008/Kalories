@@ -66,13 +66,20 @@ export default function LoginPage() {
 
   const handleSocialLogin = async (provider: string) => {
     try {
+      // Use redirect: false so we can handle navigation reliably in the app router
       const result = await signIn(provider.toLowerCase(), {
         callbackUrl: "/dashboard",
-        redirect: true,
+        redirect: false,
       })
       if (result?.error) {
         console.error("Social login error:", result.error)
         alert("Login failed. Please try again.")
+        return
+      }
+
+      // On success, NextAuth returns a `url` we should navigate to
+      if (result?.url) {
+        router.push(result.url)
       }
     } catch (error) {
       console.error("Social login failed:", error)
