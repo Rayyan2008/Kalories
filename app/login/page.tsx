@@ -37,7 +37,7 @@ export default function LoginPage() {
       const authData = localStorage.getItem("kalorie-auth")
       if (authData) {
         const { user } = JSON.parse(authData)
-        if (user.email === email) {
+        if (user && user.email === email) {
           localStorage.setItem("kalorie-auth", JSON.stringify({
             isLoggedIn: true,
             user
@@ -45,6 +45,15 @@ export default function LoginPage() {
           router.push("/dashboard")
           return
         }
+      } else {
+        // Demo fallback: create a simple user object and log them in
+        const user = { name: email.split("@")[0] || "User", email }
+        localStorage.setItem("kalorie-auth", JSON.stringify({
+          isLoggedIn: true,
+          user
+        }))
+        router.push("/dashboard")
+        return
       }
 
       alert("Invalid credentials")

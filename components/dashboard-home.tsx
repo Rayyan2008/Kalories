@@ -47,8 +47,12 @@ export default function DashboardHome() {
     // Check authentication
     if (status === "loading") return // Still loading
     if (!session) {
-      router.push("/login")
-      return
+      // Check localStorage for demo auth
+      const authData = localStorage.getItem("kalorie-auth")
+      if (!authData) {
+        router.push("/login")
+        return
+      }
     }
   }, [session, status, router])
 
